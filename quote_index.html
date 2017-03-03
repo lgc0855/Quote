@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <script src="http://apps.bdimg.com/libs/jquery/1.6.4/jquery.min.js"></script>
+    <script src="http://apps.bdimg.com/libs/jquery/1.6.4/jquery.js"></script>
+    <script src="http://code.jquery.com/color/jquery.color-2.1.2.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" />
+    <link rel="stylesheet" type="text/css" href="main.css" />
+    <title>Title</title>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#new-quote").click(function () {
+                var answer=getRandomColor();
+                var quote = document.getElementById("#new-quote");
+                var colors = ['#16a085', '#27ae60', '#2c3e50', '#f39c12', '#e74c3c', '#9b59b6', '#FB6964', '#342224', "#472E32", "#BDBB99", "#77B1A9", "#73A857"];
+                var color =Math.floor(Math.random()*12);
+                getweather();
+                $("body, .button").animate({
+                    "background-color":colors[color]
+                },1000);
+                $(".fa-quote-left , .fa-quote-right").animate({
+                    color:colors[color]
+                });
+                $(".text").animate({
+                    color:colors[color]
+                })
+            });
+
+
+            $("#twitter-button").click(function () {
+                search();
+            });
+            $("#tumblr-button").click(function () {
+                search();
+            });
+        });
+
+        var citys = ['CN101010100','CN101010200','CN101010300','CN101010400','CN101010500','CN101010600'];
+        var city_num = citys.length;
+        var city ;
+        var max_tem ;
+        var min_tem ;
+        var txt_d ;
+
+        var search = function () {
+            if(city==null)
+                city = "北京";
+            var url = "http://cn.bing.com/search?q="+city;
+            location.href = url;
+        }
+
+        var getweather = function () {
+            var city_code = citys[Math.floor(Math.random()*city_num)];
+            $.get("https://free-api.heweather.com/v5/forecast?city="+city_code+"&key=62648c60f9c3485fbea2cb79f6641dcd",function (data, status) {
+                city= data.HeWeather5[0].basic.city;
+                max_tem = data.HeWeather5[0].daily_forecast[0].tmp.max;
+                min_tem = data.HeWeather5[0].daily_forecast[0].tmp.min;
+                txt_d = data.HeWeather5[0].daily_forecast[0].cond.txt_d;
+                $(".text").text(city + "  " + txt_d + " " + min_tem + " 到 " + max_tem);
+            })
+        }
+
+        var getRandomColor = function () {
+            var color = "#" + (function (h) {
+                    return new Array(7-h.length).join("0")+h;
+                })((Math.random()*0x1000000<<0).toString(16))
+            return color ;
+        };
+    </script>
+
+</head>
+<body>
+<div class="quote-box">
+     <div class="quote-content">
+        <i class="fa fa-quote-left"></i><span class="text">点击按钮查看最新的天气信息</span><i class="fa fa-quote-right"></i>
+    </div>
+
+ <!--   <blockquote class="pull-left">
+        <div class="quote-content">
+            <i class="fa fa-quote-left"></i><span class="text">adkjcnsoncksndnkcdsdvdsvdsvfsjnd</span>
+        </div>
+        <div class="quote-author"><footer><cite>Indian Prime Minister Manmohan Singh</cite></footer></div>
+    </blockquote>
+-->
+    <div class="buttons">
+        <a class="button" id="twitter-button" > <i class="fa fa-twitter"></i></a>
+        <a class="button" id="tumblr-button"><i class="fa fa-tumblr"></i></a>
+        <button class="button" id="new-quote">查看天气</button>
+    </div>
+</div>
+</body>
+</html>
